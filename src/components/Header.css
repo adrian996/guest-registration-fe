@@ -1,0 +1,55 @@
+.navbar{
+    margin-top: 1%;
+    margin-left: 15%;
+    margin-right: 15%;
+    height: 5rem;
+    font-weight: bold;
+}
+
+.menu {
+    margin-left: 5%;
+}
+
+.wrapper {
+    height: 80px;
+}
+
+.nav-link {
+    padding-top: 28px;
+}
+
+.nav-link.active{
+    height: 80px;
+    padding-top: 28px;
+    background-color: #005AA2;
+    color: white !important;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+      margin-left: 5%;
+      margin-right: 5%;
+      height: auto;
+    }
+    .menu {
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .navbar-brand img {
+      max-width: 100px;
+    }
+    .wrapper {
+        height: auto;
+    }
+    .nav-link {
+        padding-top: 0;
+    }
+    .nav-link.active {
+        height: auto;
+        padding-top: 0;
+    }
+  }
+
+
+
+  

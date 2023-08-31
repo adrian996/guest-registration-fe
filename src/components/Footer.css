@@ -1,0 +1,13 @@
+.footer {
+    background-color: #373737;
+    margin-left: 15%;
+    margin-right: 15%;
+    height: 20rem;
+    padding-top: 3%;
+    padding-left: 3%;
+    color: #e1e1e1;
+}
+
+.column{
+    padding-top: 4%;
+}
