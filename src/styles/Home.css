@@ -1,0 +1,26 @@
+.block_container{
+    display: flex;
+    gap: 0px;
+}
+
+.block_wrapper img{
+    height: 350px;
+}
+
+.block_wrapper{
+    padding-left: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #005AA2;
+    color: white;
+    width: 60%;
+    font-size: 24px;
+}
+
+.events_container {
+    margin-top: 20px;
+    display:flex;
+    gap: 20px;
+    justify-content: "center"
+}

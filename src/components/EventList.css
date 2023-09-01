@@ -1,0 +1,21 @@
+.table_wrapper {
+    width: 60%;
+}
+  
+.table_body td {
+    padding-left: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6d6e6d;
+}
+
+.table_heading {
+    background-color: #005AA2;
+    color: white;
+    height: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+    font-weight: 400;
+}

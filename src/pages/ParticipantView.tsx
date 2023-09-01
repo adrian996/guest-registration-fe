@@ -1,18 +1,17 @@
+import { Container } from "react-bootstrap";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 export default function ParticipantView() {
   return (
     <>
-      <div>
+      <Container>
         <Header />
-      </div>
+      </Container>
 
-      <h1>participant view</h1>
-
-      <div>
+      <Container>
         <Footer />
-      </div>
+      </Container>
     </>
   );
 }

@@ -1,18 +1,17 @@
+import { Container } from "react-bootstrap";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 export default function EventAdd() {
   return (
     <>
-      <div>
+      <Container>
         <Header />
-      </div>
+      </Container>
 
-      <h1>event-add page</h1>
-
-      <div>
+      <Container>
         <Footer />
-      </div>
+      </Container>
     </>
   );
 }
