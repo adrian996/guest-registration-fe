@@ -1,0 +1,27 @@
+.title_wrapper {
+    display: flex;
+    background-color: #005AA2;
+}
+
+.title_wrapper div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    color: white;
+    font-weight: 250;
+    font-size: 35px;
+}
+
+@media(max-width: 1400px) {
+    .title_wrapper div {
+        font-size: 22px;
+        width: 20%;
+    }
+}
+/* 
+@media(max-width: 1200px) {
+    .title_wrapper div {
+        font-size: 10px;
+    }
+} */
