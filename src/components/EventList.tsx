@@ -1,35 +1,80 @@
-import { Table } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "./EventList.css";
+import { useEffect, useState } from "react";
+import Event from "../models/Event";
+import { formatDate } from "../utils/DateUtils";
+import {
+  getFutureEvents,
+  getPastEvents,
+  deleteEvent,
+} from "../services/EventService";
+import { NavLink } from "react-router-dom";
 
-export default function EventList(props: { value: string }) {
-  const heading = props.value;
+export default function EventList({ title, futureEvents }) {
+  const heading = title;
+  const [events, setEvents] = useState<Event[]>([]);
+
+  const fetchEvents = async () => {
+    try {
+      let fetchedEvents: Event[] = [];
+      if (futureEvents) {
+        fetchedEvents = await getFutureEvents();
+      } else {
+        fetchedEvents = await getPastEvents();
+      }
+      setEvents(fetchedEvents);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async (eventId: number) => {
+    try {
+      await deleteEvent(eventId);
+      await fetchEvents();
+    } catch (error) {
+      console.error("Error deleting event: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, [futureEvents]);
 
   return (
     <>
       <div className="table_wrapper">
         <div className="table_heading">{heading}</div>
-        <Table className="table table-borderless">
+        <table className="table table-borderless">
           <tbody className="table_body">
-            <tr>
-              <td>1</td>
-              <td>Event 1</td>
-              <td>01.01.2023</td>
-              <td>OSAVÕTJAD</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Event 2</td>
-              <td>01.01.2023</td>
-              <td>OSAVÕTJAD</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Event 3</td>
-              <td>01.01.2023</td>
-              <td>OSAVÕTJAD</td>
-            </tr>
+            {events.map((event, index) => (
+              <tr key={event.id}>
+                <td>
+                  {index + 1}. {event.name}
+                </td>
+                <td>{formatDate(event.date)}</td>
+                <td>
+                  <NavLink to="/event-view">
+                    <Button variant="link" className="table_button">
+                      OSAVÕTJAD
+                    </Button>{" "}
+                  </NavLink>
+                </td>
+                {futureEvents && (
+                  <td className="button_td">
+                    <Button
+                      variant="link"
+                      className="table_button"
+                      onClick={() => handleDelete(event.id)}
+                    >
+                      <b>X</b>
+                    </Button>
+                  </td>
+                )}
+              </tr>
+            ))}
           </tbody>
-        </Table>
+        </table>
       </div>
     </>
   );

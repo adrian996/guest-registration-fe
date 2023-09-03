@@ -3,14 +3,40 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import PageTitle from "../components/PageTitle";
 import "../styles/EventAdd.css";
-import DateTimePicker from "react-datetime-picker";
+import CustomAlert from "../components/CustomAlert";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import { useState } from "react";
+import Button from "react-bootstrap/Button";
+import { FormEventHandler, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { createEvent } from "../services/EventService";
+import Event from "../models/Event";
+import { validateDate } from "../utils/DateUtils";
 
 export default function EventAdd() {
-  const [value, onChange] = useState(null);
+  const [values, setValues] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
+
+  const onFormChange = (e) => {
+    const name = e.target.name;
+    const value =
+      name === "date" ? validateDate(e.target.value) : e.target.value;
+
+    setValues({ ...values, [name]: value });
+  };
+
+  const submitHandler: FormEventHandler = async (e) => {
+    e.preventDefault();
+    e.persist();
+
+    try {
+      await createEvent(values as Event);
+      setShowAlert(true);
+    } catch (error) {
+      console.error("Error saving event:", error);
+    }
+  };
 
   return (
     <>
@@ -20,54 +46,84 @@ export default function EventAdd() {
 
       <Container>
         <PageTitle value="Ürituse lisamine" />
-
-        <Form className="form_wrapper">
-          <Form.Group as={Row} className="mb-3" controlId="formEventName">
+        <Form className="form_wrapper" onSubmit={submitHandler}>
+          <Form.Group as={Row} className="mb-3">
             <Form.Label className="form_label" column>
               Ürituse nimi:
             </Form.Label>
             <Col>
-              <Form.Control />
+              <Form.Control
+                required
+                type="text"
+                name="name"
+                onChange={onFormChange}
+              />
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3" controlId="formEventDate">
+          <Form.Group as={Row} className="mb-3">
             <Form.Label className="form_label" column>
               Toimumisaeg:
             </Form.Label>
             <Col>
-              {/* <Form.Control type="date" /> */}
-              <DateTimePicker
-                className="dt_picker"
-                onChange={onChange}
-                value={value}
-              ></DateTimePicker>
+              <Form.Control
+                required
+                type="text"
+                name="date"
+                placeholder="pp.kk.aaaa hh:mm"
+                onChange={onFormChange}
+              />
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3" controlId="formEventVenue">
+          <Form.Group as={Row} className="mb-3">
             <Form.Label className="form_label" column>
               Koht:
             </Form.Label>
             <Col>
-              <Form.Control />
+              <Form.Control
+                required
+                type="text"
+                name="venue"
+                onChange={onFormChange}
+              />
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3" controlId="formAdditionalInfo">
+          <Form.Group as={Row} className="mb-3">
             <Form.Label className="form_label" column>
               Lisainfo:
             </Form.Label>
             <Col>
-              <Form.Control as="textarea" />
+              <Form.Control
+                as="textarea"
+                type="text"
+                name="additional_information"
+                onChange={onFormChange}
+              />
             </Col>
           </Form.Group>
+
+          <div className="button_wrapper">
+            <NavLink to="/home" className="custom_nav_link">
+              <Button className="button back">Tagasi</Button>{" "}
+            </NavLink>
+            <Button className="button add" type="submit">
+              Lisa
+            </Button>{" "}
+          </div>
         </Form>
       </Container>
 
       <Container>
         <Footer />
       </Container>
+
+      <CustomAlert
+        showAlert={showAlert}
+        setShowAlert={setShowAlert}
+        message="Event successfully saved!"
+      ></CustomAlert>
     </>
   );
 }

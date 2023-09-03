@@ -24,8 +24,8 @@ export default function Home() {
       </Container>
 
       <Container className="events_container">
-        <EventList value="Tulevased üritused" />
-        <EventList value="Toimunud üritused" />
+        <EventList title="Tulevased üritused" futureEvents={true} />
+        <EventList title="Toimunud üritused" futureEvents={false} />
       </Container>
 
       <Container>

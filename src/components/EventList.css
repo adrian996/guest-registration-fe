@@ -3,13 +3,15 @@
 }
   
 .table_body td {
-    padding-left: 30px;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     color: #6d6e6d;
+    padding:5px;
+    margin-left: 45%;
 }
 
 .table_heading {
+    padding: 3% 0;
     background-color: #005AA2;
     color: white;
     height: 35%;
@@ -18,4 +20,22 @@
     align-items: center;
     font-size: 21px;
     font-weight: 400;
+}
+  
+ 
+.table_button {
+    font-weight: 500;
+    color: gray;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 0; 
+
+}
+
+.table_button:hover {
+    color: gray;
+}
+
+.button_td Button{
+    margin-left: -220%;
 }

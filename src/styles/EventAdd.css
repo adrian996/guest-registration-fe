@@ -6,6 +6,33 @@
 .form_label {
     font-weight: 500;
 }
+
+.button_wrapper {
+  padding-top: 5%;
+}
+
+.custom_nav_link {
+  display: inline-block;
+  width: auto;
+}
+
+.button{
+  width: 90px;
+  border: 0;
+  padding: 5px;
+}
+
+.button.back {
+  color: black;
+  background-color: silver;
+}
+
+.button.add {
+  color: white;
+  background-color: #005AA2;
+  margin-left: 5px;
+}
+
  
 @media(max-width: 1000px) {
     .form_wrapper {
@@ -20,12 +47,12 @@
     width: 100%;
     padding: 8px;
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1;
     color: #495057;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-    border-radius: 0.25rem;
+    border-radius: 0.30rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     outline: 0;
   }
