@@ -46,6 +46,7 @@ export default function EventAdd() {
 
       <Container>
         <PageTitle value="Ürituse lisamine" />
+        <div className="view_wrapper">Ürituse lisamine</div>
         <Form className="form_wrapper" onSubmit={submitHandler}>
           <Form.Group as={Row} className="mb-3">
             <Form.Label className="form_label" column>

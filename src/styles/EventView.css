@@ -16,3 +16,26 @@
     font-size: 15px;
     font-weight: 300;
 }
+
+.typeform_wrapper {
+    display: flex;
+    padding:0% 0;
+    background-color: white;
+}
+
+.typeform_wrapper Form.Check{
+    padding-left: 4.5em;
+}
+
+.myform{
+    margin-bottom: -5rem;
+}
+
+.type_radio{
+    margin-left: 16%;
+    margin-right: 20px;
+}
+
+.participantform_wrapper{
+    background-color: red;
+}

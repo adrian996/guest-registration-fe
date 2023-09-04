@@ -1,0 +1,19 @@
+.view_wrapper {
+    font-size: 22px;
+    font-weight: 500;
+    color: #005AA2;
+}
+
+.form_wrapper{
+    padding-top: 0px;
+}
+
+.form_label{
+    margin-left: 5%;
+    
+}
+
+.button_wrapper{
+    margin-left: 5%;
+}
+
