@@ -1,0 +1,18 @@
+.view_wrapper {
+    padding: 2% 32%;
+    background-color: white;
+    font-size: 22px;
+    font-weight: 500;
+    color: #005AA2;
+}
+
+.view_wrapper table table-borderless{
+    background-color: red;
+    width: 20px;
+}
+
+.view_wrapper td {
+    padding: 2% 0;
+    font-size: 15px;
+    font-weight: 300;
+}

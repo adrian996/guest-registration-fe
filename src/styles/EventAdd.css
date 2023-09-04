@@ -39,33 +39,3 @@
         padding: 5%;
     }
 }
-
-
-/* custom style for react-datetime-picker */
-.dt_picker {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    font-size: 1rem;
-    line-height: 1;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.30rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    outline: 0;
-  }
-  
-  /* Style for react-datetime-picker when focused */
-  .dt_picker:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  }
-  
-  /* Style for react-datetime-picker when disabled */
-  .dt_picker:disabled {
-    background-color: #e9ecef;
-    opacity: 1;
-  }

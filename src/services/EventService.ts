@@ -2,6 +2,25 @@ import Event from "../models/Event";
 
 const BASE_URL = 'http://localhost:8080/api';
 
+export async function getEventById(eventId: string): Promise<Event | null> {
+  try {
+    const response = await fetch(`${BASE_URL}/events/${eventId}`);
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      } else {
+        throw new Error(`Failed to fetch event. Status: ${response.status}`);
+      }
+    }
+
+    const event: Event = await response.json();
+    return event;
+  } catch (error) {
+    console.error('Error fetching by id:', error);
+    throw error;
+  }
+}
+
 export async function getFutureEvents(): Promise<Event[]> {
   try {
     const response = await fetch(`${BASE_URL}/events/future`);
@@ -10,10 +29,10 @@ export async function getFutureEvents(): Promise<Event[]> {
     }
 
     const futureEvents: Event[] = await response.json();
-    console.log(futureEvents);
     return futureEvents;
   } catch (error) {
-    throw new Error(`Error fetching future events: ${error.message}`);
+    console.error('Error getting future events:', error);
+    throw error;
   }
 }
 
@@ -27,7 +46,8 @@ export async function getPastEvents(): Promise<Event[]> {
     const pastEvents: Event[] = await response.json();
     return pastEvents;
   } catch (error) {
-    throw new Error(`Error fetching past events: ${error.message}`);
+    console.error('Error getting past events:', error);
+    throw error;
   }
 }
 
@@ -40,7 +60,8 @@ export async function deleteEvent(eventId: number): Promise<void> {
       throw new Error(`Failed to delete event. Status: ${response.status}`);
     }
   } catch (error) {
-    throw new Error(`Error deleting event: ${error.message}`);
+    console.error('Error:', error);
+    throw error;
   }
 }
 
@@ -59,8 +80,8 @@ export async function createEvent(newEvent: Event) {
       const data = await response.json();
       return data;
     } else {
-      const errorData = await response.json();
-      throw new Error(`Failed to create event: ${errorData.message}`);
+      const error = await response.json();
+      throw new Error(`Failed to create event: ${error.message}`);
     }
   } catch (error) {
     console.error('Error:', error);

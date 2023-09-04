@@ -3,14 +3,10 @@ import "./EventList.css";
 import { useEffect, useState } from "react";
 import Event from "../models/Event";
 import { formatDate } from "../utils/DateUtils";
-import {
-  getFutureEvents,
-  getPastEvents,
-  deleteEvent,
-} from "../services/EventService";
+import { getFutureEvents, getPastEvents, deleteEvent} from "../services/EventService";
 import { NavLink } from "react-router-dom";
 
-export default function EventList({ title, futureEvents }) {
+export default function EventList({title, futureEvents}: {title: string; futureEvents: boolean;}) {
   const heading = title;
   const [events, setEvents] = useState<Event[]>([]);
 
@@ -54,7 +50,7 @@ export default function EventList({ title, futureEvents }) {
                 </td>
                 <td>{formatDate(event.date)}</td>
                 <td>
-                  <NavLink to="/event-view">
+                  <NavLink to={`/event-view/${event.id}`}>
                     <Button variant="link" className="table_button">
                       OSAVÕTJAD
                     </Button>{" "}
@@ -65,7 +61,9 @@ export default function EventList({ title, futureEvents }) {
                     <Button
                       variant="link"
                       className="table_button"
-                      onClick={() => handleDelete(event.id)}
+                      onClick={() =>
+                        event.id !== undefined && handleDelete(event.id)
+                      }
                     >
                       <b>X</b>
                     </Button>
