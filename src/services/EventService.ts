@@ -1,4 +1,6 @@
+import Company from "../models/Company";
 import Event from "../models/Event";
+import Person from "../models/Person";
 
 const BASE_URL = 'http://localhost:8080/api';
 
@@ -17,6 +19,22 @@ export async function getEventById(eventId: string): Promise<Event | null> {
     return event;
   } catch (error) {
     console.error('Error fetching by id:', error);
+    throw error;
+  }
+}
+
+export async function getParticipantsByEventId(eventId: number): Promise<Person[] | Company[]> {
+  try {
+    const response = await fetch(`${BASE_URL}/events/${eventId}/participants`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch event participants. Status: ${response.status}`);
+    }
+
+    const participants: Person[] | Company[] = await response.json();
+    return participants;
+  } catch (error) {
+    console.error('Error getting event participants:', error);
     throw error;
   }
 }
