@@ -82,6 +82,10 @@ export default function ParticipantForm({
     }
   }, [participantId]);
 
+  useEffect(() => {
+    setValues({});
+  }, [participantType])
+
   return (
     <>
       <Container>

@@ -73,6 +73,13 @@ export default function EventList({title, futureEvents}: {title: string; futureE
             ))}
           </tbody>
         </table>
+        <div className="event_add_wrapper">
+              <NavLink to={`/event-add`}>
+                <Button variant="link" className="table_button">
+                  LISA ÜRITUS
+                </Button>{" "}
+              </NavLink>
+            </div>
       </div>
     </>
   );

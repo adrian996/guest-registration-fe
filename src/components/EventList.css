@@ -1,5 +1,6 @@
 .table_wrapper {
     width: 60%;
+    padding-bottom: 5%;
 }
   
 .table_body td {
@@ -7,6 +8,7 @@
     font-weight: 500;
     color: #6d6e6d;
     padding:5px;
+    padding-left: 5%;
     margin-left: 45%;
 }
 
@@ -14,7 +16,9 @@
     padding: 3% 0;
     background-color: #005AA2;
     color: white;
-    height: 35%;
+    height: 5rem;
+    min-height: 5rem;
+    max-height: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,4 +42,14 @@
 
 .button_td Button{
     margin-left: -220%;
+    position: relative;
+    translate: -350%;
+}
+
+.event_add_wrapper{ 
+    height: 15%;
+    position: relative;
+    transform: translateY(-22%);
+    padding: 5% 0% 2% 5%;
+    background-color: white;
 }
