@@ -14,8 +14,6 @@ export function stringToParticipantTypeEnum(
 }
 
 export function validateEstonianIdCode(idCode: string) {
-  console.log("id koord" + idCode);
-
   if (idCode.length !== 11) {
     return false;
   }

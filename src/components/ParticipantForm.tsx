@@ -1,20 +1,11 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-
 import PageTitle from "./PageTitle";
 import { FormEventHandler, useEffect, useState } from "react";
 import { ParticipantType } from "../enums/ParticipantType";
 import { PaymentMethod } from "../enums/PaymentMethod";
-import {
-  stringToParticipantTypeEnum,
-  validateEstonianIdCode,
-} from "../utils/Utils";
-import {
-  fetchParticipantById,
-  updateParticipant,
-} from "../services/ParticipantService";
-import Company from "../models/Company";
-import Person from "../models/Person";
+import {stringToParticipantTypeEnum, validateEstonianIdCode} from "../utils/Utils";
+import {fetchParticipantById, updateParticipant} from "../services/ParticipantService";
 
 export default function ParticipantForm({
   title,
@@ -31,51 +22,53 @@ export default function ParticipantForm({
 }) {
   const [values, setValues] = useState({});
   const navigate = useNavigate();
-  const [participant, setParticipant] = useState<Person | Company>();
 
-  const participantType =
-    typeParticipant !== null
+  const participantType = typeParticipant !== null
       ? stringToParticipantTypeEnum(typeParticipant)
       : undefined;
 
-  const onFormChange = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    const re = /^[A-Za-z]+$/;
-    // if (value === "" || re.test(value)) {
-    // }
-    setValues({ ...values, [name]: value });
+  const onFormChange = (e: Event) => {
+    const { name, value } = e.target;
+    validateAndSetValues(name, value);
+  };
+
+  const validateAndSetValues = (name: string, value: string) => {
+    if (name === "firstName" || name === "lastName" || name === "legalName") {
+      if (/^[a-zA-ZäöüõÄÖÜÕ]*$/.test(value) || value === "") {
+        setValues({ ...values, [name]: value });
+      }
+    } else {
+      setValues({ ...values, [name]: value });
+    }
   };
 
   const submitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
+    e.persist();
 
     try {
-      //if (values.idCode && validateEstonianIdCode(values.idCode)) {
+      if (values.idCode && !validateEstonianIdCode(values.idCode)) {
+        alert("Vigane ID kood");
+        return;
+      }
+  
       if (!editParticipant) {
-        await sendParticipantObject(values);
+        sendParticipantObject(values);
         setValues({});
       } else {
         await updateParticipant(participantId, values, typeParticipant);
       }
+  
       navigate("/home");
-      //}
     } catch (error) {
       console.error("Error saving participant:", error);
     }
   };
 
-  const getParticipantById = async (
-    participantId: number,
-    typeParticipant: ParticipantType
-  ) => {
+  const getParticipantById = async (participantId: number, typeParticipant: ParticipantType) => {
     try {
       if (participantId) {
-        const participant = await fetchParticipantById(
-          participantId,
-          typeParticipant
-        );
-        setParticipant(participant);
+        const participant = await fetchParticipantById(participantId, typeParticipant);
         setValues(participant);
       }
     } catch (error) {
@@ -107,6 +100,8 @@ export default function ParticipantForm({
                       required
                       value={values.firstName || ""}
                       type="text"
+                      maxLength={50}
+                      minLength={3}
                       name="firstName"
                       onChange={onFormChange}
                     />
@@ -125,6 +120,8 @@ export default function ParticipantForm({
                     required
                     value={values.lastName || ""}
                     type="text"
+                    maxLength={50}
+                    minLength={3}
                     name="lastName"
                     onChange={onFormChange}
                   />
@@ -142,6 +139,8 @@ export default function ParticipantForm({
                     required
                     value={values.idCode || ""}
                     type="number"
+                    maxLength={11}
+                    minLength={11}
                     name="idCode"
                     onChange={onFormChange}
                   />
@@ -159,6 +158,8 @@ export default function ParticipantForm({
                     required
                     value={values.legalName || ""}
                     type="text"
+                    maxLength={50}
+                    minLength={3}
                     name="legalName"
                     onChange={onFormChange}
                   />
@@ -176,6 +177,8 @@ export default function ParticipantForm({
                     required
                     value={values.registryCode || ""}
                     type="text"
+                    maxLength={50}
+                    minLength={5}
                     name="registryCode"
                     onChange={onFormChange}
                   />
