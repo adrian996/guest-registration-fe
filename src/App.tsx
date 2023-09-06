@@ -15,7 +15,10 @@ function App() {
           <Route index element={<Home />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/event-view/:eventId" element={<EventView />}></Route>
-          <Route path="/participant-view/:participantId" element={<ParticipantView />}></Route>
+          <Route
+            path="/:eventId/participant-view/:participantId"
+            element={<ParticipantView />}
+          ></Route>
           <Route path="/event-add" element={<EventAdd />}></Route>
           <Route path="*" element={<NoPage />}></Route>
         </Routes>

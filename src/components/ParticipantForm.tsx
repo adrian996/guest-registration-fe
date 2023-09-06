@@ -1,24 +1,37 @@
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+
 import PageTitle from "./PageTitle";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import { ParticipantType } from "../enums/ParticipantType";
 import { PaymentMethod } from "../enums/PaymentMethod";
-import { stringToParticipantTypeEnum } from "../utils/Utils";
-import Person from "../models/Person";
-import { addParticipant } from "../services/PersonService";
+import {
+  stringToParticipantTypeEnum,
+  validateEstonianIdCode,
+} from "../utils/Utils";
+import {
+  fetchParticipantById,
+  updateParticipant,
+} from "../services/ParticipantService";
 import Company from "../models/Company";
+import Person from "../models/Person";
 
 export default function ParticipantForm({
   title,
+  participantId,
   typeParticipant,
   editParticipant,
+  sendParticipantObject,
 }: {
   title: string;
+  participantId: number;
   typeParticipant: string | null;
   editParticipant: boolean;
+  sendParticipantObject: (data: unknown) => void;
 }) {
   const [values, setValues] = useState({});
+  const navigate = useNavigate();
+  const [participant, setParticipant] = useState<Person | Company>();
 
   const participantType =
     typeParticipant !== null
@@ -28,21 +41,53 @@ export default function ParticipantForm({
   const onFormChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-
+    const re = /^[A-Za-z]+$/;
+    // if (value === "" || re.test(value)) {
+    // }
     setValues({ ...values, [name]: value });
   };
 
   const submitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
-    e.persist();
 
     try {
-      await addParticipant(values as Person);
-      //setShowAlert(true);
+      //if (values.idCode && validateEstonianIdCode(values.idCode)) {
+      if (!editParticipant) {
+        await sendParticipantObject(values);
+        setValues({});
+      } else {
+        await updateParticipant(participantId, values, typeParticipant);
+      }
+      navigate("/home");
+      //}
     } catch (error) {
-      console.error("Error saving event:", error);
+      console.error("Error saving participant:", error);
     }
   };
+
+  const getParticipantById = async (
+    participantId: number,
+    typeParticipant: ParticipantType
+  ) => {
+    try {
+      if (participantId) {
+        const participant = await fetchParticipantById(
+          participantId,
+          typeParticipant
+        );
+        setParticipant(participant);
+        setValues(participant);
+      }
+    } catch (error) {
+      console.error("Error fetching participant details:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (editParticipant) {
+      getParticipantById(participantId, typeParticipant);
+    }
+  }, [participantId]);
 
   return (
     <>
@@ -60,6 +105,7 @@ export default function ParticipantForm({
                   <Col>
                     <Form.Control
                       required
+                      value={values.firstName || ""}
                       type="text"
                       name="firstName"
                       onChange={onFormChange}
@@ -77,6 +123,7 @@ export default function ParticipantForm({
                 <Col>
                   <Form.Control
                     required
+                    value={values.lastName || ""}
                     type="text"
                     name="lastName"
                     onChange={onFormChange}
@@ -93,7 +140,8 @@ export default function ParticipantForm({
                 <Col>
                   <Form.Control
                     required
-                    type="text"
+                    value={values.idCode || ""}
+                    type="number"
                     name="idCode"
                     onChange={onFormChange}
                   />
@@ -109,6 +157,7 @@ export default function ParticipantForm({
                 <Col>
                   <Form.Control
                     required
+                    value={values.legalName || ""}
                     type="text"
                     name="legalName"
                     onChange={onFormChange}
@@ -125,6 +174,7 @@ export default function ParticipantForm({
                 <Col>
                   <Form.Control
                     required
+                    value={values.registryCode || ""}
                     type="text"
                     name="registryCode"
                     onChange={onFormChange}
@@ -141,7 +191,8 @@ export default function ParticipantForm({
                 <Col>
                   <Form.Control
                     required
-                    type="text"
+                    value={values.numberOfParticipants || ""}
+                    type="number"
                     name="numberOfParticipants"
                     onChange={onFormChange}
                   />
@@ -156,6 +207,7 @@ export default function ParticipantForm({
               <Col>
                 <Form.Control
                   as="select"
+                  value={values.paymentMethod || ""}
                   required
                   name="paymentMethod"
                   onChange={onFormChange}
@@ -177,6 +229,10 @@ export default function ParticipantForm({
               <Col>
                 <Form.Control
                   as="textarea"
+                  maxLength={
+                    typeParticipant === ParticipantType.PERSON ? 1500 : 5000
+                  }
+                  value={values.additionalInformation || ""}
                   type="text"
                   name="additionalInformation"
                   onChange={onFormChange}

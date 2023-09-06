@@ -2,10 +2,13 @@ import { Button, Container, Form, Spinner } from "react-bootstrap";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import PageTitle from "../components/PageTitle";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import {
   getEventById,
   getParticipantsByEventId,
+  addCompanyParticipant,
+  addPersonParticipant,
+  deleteParticipantFromEvent,
 } from "../services/EventService";
 import { useEffect, useState } from "react";
 import "../styles/EventView.css";
@@ -19,9 +22,12 @@ import { stringToParticipantTypeEnum } from "../utils/Utils";
 
 export default function EventView() {
   const { eventId } = useParams();
+  const navigate = useNavigate();
   const [event, setEvent] = useState<Event>();
   const [participants, setParticipants] = useState<Person[] | Company[]>();
-  const [selectedType, setSelectedType] = useState<ParticipantType>();
+  const [selectedType, setSelectedType] = useState<ParticipantType>(
+    ParticipantType.PERSON
+  );
 
   const fetchEventById = async () => {
     try {
@@ -34,21 +40,48 @@ export default function EventView() {
     }
   };
 
+  const handleParticipantDTO = (participant: Person | Company) => {
+    try {
+      if (selectedType === ParticipantType.PERSON) {
+        addPersonParticipant(participant, eventId);
+      } else if (selectedType === ParticipantType.COMPANY) {
+        addCompanyParticipant(participant, eventId);
+      }
+      navigate("/home");
+    } catch (error) {
+      console.error("Error saving event:", error);
+    }
+  };
+
   const fetchParticipantsById = async () => {
     try {
       if (eventId) {
         const participants = await getParticipantsByEventId(eventId);
         setParticipants(participants);
-        console.log(participants);
       }
     } catch (error) {
       console.error("Error fetching participants:", error);
     }
   };
 
-  const handleParticipantTypeChange = (event) => {
+  const handleParticipantTypeChange = (event: {
+    target: { value: string };
+  }) => {
     const selectedType = stringToParticipantTypeEnum(event.target.value);
     setSelectedType(selectedType);
+  };
+
+  const handleDeleteParticipant = async (
+    eventId: number,
+    participantId: number,
+    participantType: ParticipantType
+  ) => {
+    try {
+      await deleteParticipantFromEvent(eventId, participantId, participantType);
+      await fetchParticipantsById();
+    } catch (error) {
+      console.error("Error deleting participant: ", error);
+    }
   };
 
   useEffect(() => {
@@ -109,7 +142,7 @@ export default function EventView() {
                               </td>
                               <td>
                                 <NavLink
-                                  to={`/participant-view/${event.id}?type=${participant.type}`}
+                                  to={`/${event.id}/participant-view/${participant.id}?type=${participant.type}`}
                                 >
                                   <Button
                                     variant="link"
@@ -120,14 +153,20 @@ export default function EventView() {
                                 </NavLink>
                               </td>
                               <td>
-                                <NavLink to={`/`}>
-                                  <Button
-                                    variant="link"
-                                    className="table_button"
-                                  >
-                                    KUSTUTA
-                                  </Button>{" "}
-                                </NavLink>
+                                <Button
+                                  variant="link"
+                                  className="table_button"
+                                  onClick={() =>
+                                    event.id !== undefined &&
+                                    handleDeleteParticipant(
+                                      event.id,
+                                      participant.id,
+                                      participant.type
+                                    )
+                                  }
+                                >
+                                  KUSTUTA
+                                </Button>{" "}
                               </td>
                             </tr>
                           ))}
@@ -171,7 +210,14 @@ export default function EventView() {
         title=""
         typeParticipant={selectedType}
         editParticipant={false}
+        sendParticipantObject={handleParticipantDTO}
       />
+
+      {/* <CustomAlert
+        showAlert={showAlert}
+        setShowAlert={setShowAlert}
+        message="Person successfully saved!"
+      ></CustomAlert> */}
 
       <Container>
         <Footer />

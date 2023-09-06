@@ -7,7 +7,6 @@ import { Container } from "react-bootstrap";
 export default function ParticipantView() {
   const location = useLocation();
   const typeParticipant = new URLSearchParams(location.search).get("type");
-
   const { participantId } = useParams();
 
   return (
@@ -20,6 +19,7 @@ export default function ParticipantView() {
         <ParticipantForm
           title="Osavõtja info"
           typeParticipant={typeParticipant}
+          participantId={participantId}
           editParticipant={true}
         />
       </Container>

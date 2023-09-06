@@ -9,14 +9,14 @@ import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import Button from "react-bootstrap/Button";
 import { FormEventHandler, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { createEvent } from "../services/EventService";
 import Event from "../models/Event";
 import { validateDate } from "../utils/DateUtils";
 
 export default function EventAdd() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({});
-  const [showAlert, setShowAlert] = useState(false);
 
   const onFormChange = (e) => {
     const name = e.target.name;
@@ -32,7 +32,7 @@ export default function EventAdd() {
 
     try {
       await createEvent(values as Event);
-      setShowAlert(true);
+      navigate("/home");
     } catch (error) {
       console.error("Error saving event:", error);
     }
@@ -99,6 +99,7 @@ export default function EventAdd() {
               <Form.Control
                 as="textarea"
                 type="text"
+                maxLength={1000}
                 name="additional_information"
                 onChange={onFormChange}
               />
@@ -120,11 +121,11 @@ export default function EventAdd() {
         <Footer />
       </Container>
 
-      <CustomAlert
+      {/* <CustomAlert
         showAlert={showAlert}
         setShowAlert={setShowAlert}
         message="Event successfully saved!"
-      ></CustomAlert>
+      ></CustomAlert> */}
     </>
   );
 }
