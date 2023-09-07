@@ -49,7 +49,7 @@
 .event_add_wrapper{ 
     height: 15%;
     position: relative;
-    transform: translateY(-22%);
-    padding: 5% 0% 2% 5%;
+    transform: translateY(-25%);
+    padding: 5% 0% 7% 5%;
     background-color: white;
 }
